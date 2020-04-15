@@ -4,12 +4,11 @@
     <meta charset="utf-8">
     <title>360&deg; Image Gallery</title>
     <meta name="description" content="360&deg; Image Gallery - A-Frame">
-    <script src="https://aframe.io/releases/1.0.1/aframe.min.js"></script>
-    <script src="https://npmcdn.com/aframe-animation-component@5.1.2"></script>
-    <script src="https://npmcdn.com/aframe-event-set-component@5.0.0"></script>
-    <script src="https://npmcdn.com/aframe-layout-component@5.3.0"></script>
-    <script src="https://npmcdn.com/aframe-template-component@3.1.1"></script>
-    <script src="components/set-image.js"></script>
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    
+     <!--animation component script-->
+    <script src="https://unpkg.com/aframe-animation-component@^4.1.2/dist/aframe-animation-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-look-at-component@0.5.1/dist/aframe-look-at-component.min.js"></script>
   </head>
   <body>
     <a-scene>
@@ -50,16 +49,21 @@
 
       </a-entity>
 
-      <!-- Camera + cursor. -->
-      <a-entity camera look-controls>
-        <a-cursor id="cursor"
-          animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"
-          animation__fusing="property: fusing; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500"
-          event-set__1="_event: mouseenter; color: springgreen"
-          event-set__2="_event: mouseleave; color: black"
-          fuse="true"
-          raycaster="objects: .link"></a-cursor>
-      </a-entity>
+       <a-entity id="cam" camera="fov:80" position="0 1.6 0" look-controls
+                animation__zoomin="property:camera.fov;dur:2000;to:50;startEvents:zoomin;"
+                animation__zoomout="property:camera.fov;dur:1000;to:80;startEvents:zoomout;">
+        
+        <a-entity id="cursor-visual" cursor="fuse:true;fuseTimeout:2000" 
+                  material="shader:flat;color:#09B4FF" 
+                  position="0 0 -1" 
+                  geometry="primitive: ring; radiusInner: 0.01; radiusOuter: 0.015;thetaLength:0"
+                  animation__mouseenter="property: geometry.thetaLength; dir: alternate; dur: 2000;
+                                easing: easeInSine; from:0;to: 360;startEvents:startFuse;pauseEvents:stopFuse;autoplay:false"
+                  
+                  animation__mouseleave="property: geometry.thetaLength; dir: alternate; dur: 500;
+                                easing: easeInSine; to: 0;startEvents:stopFuse;autoplay:false">
+          <a-entity geometry="primitive:ring;radiusOuter:0.015;radiusInner:0.01" material="shader:flat;color:#000000"></a-entity>
+        </a-entity>
     </a-scene>
   </body>
 </html>
